@@ -1,0 +1,20 @@
+[
+  {
+    "symbol": "SPY",
+    "initial": 100000,
+    "final": 158820,
+    "return": 58.82
+  },
+  {
+    "symbol": "QQQ",
+    "initial": 100000,
+    "final": 197466,
+    "return": 97.47
+  },
+  {
+    "symbol": "GLD",
+    "initial": 100000,
+    "final": 140670,
+    "return": 40.67
+  }
+]
