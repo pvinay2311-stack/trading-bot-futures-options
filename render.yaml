@@ -1,0 +1,48 @@
+services:
+  - type: web
+    name: trading-bot-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: MODE
+        value: paper_trade
+      - key: ALPACA_API_KEY
+        sync: false
+      - key: ALPACA_SECRET_KEY
+        sync: false
+      - key: DISCORD_WEBHOOK_URL
+        sync: false
+
+  - type: cron
+    name: trading-bot-morning-scan
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -c "from paper_trader.alpaca_connector import AlpacaPaperTrader; trader = AlpacaPaperTrader(); trader.get_positions()"
+    schedule: "0 9 * * 1-5"
+    envVars:
+      - key: ALPACA_API_KEY
+        sync: false
+      - key: ALPACA_SECRET_KEY
+        sync: false
+
+  - type: cron
+    name: trading-bot-market-close
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -c "from paper_trader.alpaca_connector import AlpacaPaperTrader; trader = AlpacaPaperTrader(); print(trader.get_account_info())"
+    schedule: "0 16 * * 1-5"
+    envVars:
+      - key: ALPACA_API_KEY
+        sync: false
+      - key: ALPACA_SECRET_KEY
+        sync: false
+
+  - type: cron
+    name: trading-bot-daily-backtest
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python backtester/runner.py
+    schedule: "0 20 * * 0"
+    envVars: []
